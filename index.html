@@ -4308,13 +4308,13 @@ const pinGate       = document.getElementById('pinGate');
 const cpDash        = document.getElementById('cpDash');
 const pinError      = document.getElementById('pinError');
 const CREATOR_PIN   = '2029';
+const CREATOR_USER  = 'meed';
 let   pinEntry      = '';
 let   pinUnlocked   = false;
 let   editingId     = null;
 
 document.getElementById('openCreator').addEventListener('click', () => {
-  const registeredCreator = localStorage.getItem('bored_creator');
-  if (registeredCreator && currentUser !== registeredCreator) return; // silently ignore for non-creators
+  if (currentUser !== CREATOR_USER) return;
   creatorPortal.classList.add('open');
   if (!pinUnlocked) { pinEntry = ''; updatePinDots(); pinError.textContent = ''; }
 });
@@ -4355,12 +4355,8 @@ function checkPin() {
     pinEntry = ''; updatePinDots();
     return;
   }
-  const registeredCreator = localStorage.getItem('bored_creator');
-  if (!registeredCreator) {
-    // First-time: register whoever entered the PIN as the creator
-    localStorage.setItem('bored_creator', currentUser);
-  } else if (currentUser !== registeredCreator) {
-    pinError.textContent = `Access restricted. This portal belongs to @${registeredCreator}.`;
+  if (currentUser !== CREATOR_USER) {
+    pinError.textContent = `Access restricted to the creator account.`;
     pinEntry = ''; updatePinDots();
     return;
   }
