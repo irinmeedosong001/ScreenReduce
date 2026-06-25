@@ -75,19 +75,24 @@
     .discover-commentary {
       font-family: 'Times New Roman', Times, serif;
       font-style: italic;
-      color: var(--muted);
-      font-size: 1rem;
+      color: var(--text);
+      font-size: 1.1rem;
       line-height: 1.75;
       text-align: center;
       margin-bottom: 2rem;
       padding: 1rem 1.5rem;
       border-top: 1px solid var(--border);
       border-bottom: 1px solid var(--border);
+      min-height: 2.2em;
     }
-    .discover-commentary strong {
-      font-style: normal;
-      color: var(--text);
-      font-weight: 700;
+    .discover-commentary.typing::after {
+      content: '|';
+      color: var(--accent);
+      animation: blink-cursor 0.6s step-end infinite;
+    }
+    @keyframes blink-cursor {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0; }
     }
 
     /* Mood selector */
@@ -3682,20 +3687,44 @@ updateCounts();
 renderGrid();
 switchPage('discover');
 
-// ── Encouragement quotes ──
+// ── Encouragement quotes — typewriter effect ──
 (function() {
   const quotes = [
-    "Your best memories were never made staring at a screen.<br><strong>Go make one today.</strong>",
-    "The world outside is still there — <strong>patient, beautiful, and waiting for you.</strong>",
-    "Every hour offline is an hour <strong>fully, irreversibly yours.</strong>",
-    "You won't remember the scroll. <strong>You will remember the moment you stepped away.</strong>",
-    "Put it down. Step out. <strong>Something good is already waiting.</strong>",
-    "Screens can wait. <strong>Life, famously, cannot.</strong>",
-    "The most interesting version of yourself <strong>doesn't live on a device.</strong>",
-    "Idle hands, curious mind — <strong>that's where the good ideas come from.</strong>"
+    "you look cute today. let's go do something.",
+    "hey. the couch will still be there when you get back.",
+    "honestly? you should just go outside right now.",
+    "you've been inside long enough, bestie.",
+    "your future self is already proud of you for this.",
+    "no one ever looked back and wished they'd scrolled more.",
+    "the weather's actually pretty nice today. just saying.",
+    "real talk — you deserve a little adventure today.",
+    "you're way too interesting to just sit here.",
+    "close the tab. go be a person. report back with stories.",
+    "you didn't come this far to just stare at a screen.",
+    "go touch some grass. we mean that in the nicest way.",
+    "something fun is literally waiting for you to show up.",
+    "today could be a good story. go write it.",
+    "you look like someone who needs a little fresh air."
   ];
+
   const el = document.getElementById('discoverQuote');
-  if (el) el.innerHTML = quotes[Math.floor(Math.random() * quotes.length)];
+  if (!el) return;
+
+  const text = quotes[Math.floor(Math.random() * quotes.length)];
+  let i = 0;
+  el.textContent = '';
+  el.classList.add('typing');
+
+  function type() {
+    if (i < text.length) {
+      el.textContent += text[i++];
+      setTimeout(type, 40);
+    } else {
+      el.classList.remove('typing');
+    }
+  }
+
+  setTimeout(type, 350);
 })();
 
 // ── Timer ──
