@@ -2814,8 +2814,19 @@
     <span class="tb-appname">ScreenReduce</span>
     <span class="tb-date" id="tbDate"></span>
     <span class="tb-time" id="tbTime"></span>
-    <span class="tb-usage" id="tbUsage"></span>
+    <span class="tb-usage" id="tbUsage">0 done</span>
   </div>
+  <script>
+    (function(){
+      var _n = new Date();
+      document.getElementById('tbTime').textContent = _n.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',hour12:true});
+      document.getElementById('tbDate').textContent = _n.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
+      setInterval(function(){
+        var n = new Date();
+        document.getElementById('tbTime').textContent = n.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',hour12:true});
+      }, 1000);
+    })();
+  </script>
 
   <!-- Account button fixed top-right -->
   <button class="user-chip" id="userChip" onclick="openProfile()"></button>
@@ -3739,17 +3750,11 @@ switchPage('discover');
 
 // ── Top bar: clock + session usage ──
 function updateTopBar() {
-  var now = new Date();
-  var tTime = document.getElementById('tbTime');
-  var tDate = document.getElementById('tbDate');
-  var tUsage = document.getElementById('tbUsage');
-  if (!tTime || !tDate || !tUsage) return;
-  tTime.textContent = now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
-  tDate.textContent = now.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
-  var doneCount = done ? done.length : 0;
-  tUsage.textContent = doneCount === 1 ? '✓ 1 activity done' : '✓ ' + doneCount + ' activities done';
+  var el = document.getElementById('tbUsage');
+  if (!el) return;
+  var doneCount = Array.isArray(done) ? done.length : 0;
+  el.textContent = doneCount === 1 ? '✓ 1 activity done' : '✓ ' + doneCount + ' activities done';
 }
-setInterval(updateTopBar, 1000);
 updateTopBar();
 
 // ── Encouragement quotes — typewriter effect ──
