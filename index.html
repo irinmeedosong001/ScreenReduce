@@ -25,7 +25,7 @@
       color: var(--text);
       min-height: 100vh;
       overflow-x: hidden;
-      padding-left: 200px;
+      padding-left: 40px;
     }
     @media (max-width: 640px) {
       body { padding-left: 0; padding-bottom: 64px; }
@@ -611,21 +611,21 @@
 
     /* ── Top navigation ── */
     .nav-brand {
-      font-size: 1.15rem;
-      font-weight: 800;
-      color: var(--text);
-      padding: 1.4rem 1.2rem 1.2rem;
+      font-size: 0;
+      padding: 0.9rem 0;
       border-bottom: 1px solid var(--border);
-      margin-bottom: 0.5rem;
-      letter-spacing: -0.01em;
+      margin-bottom: 0.4rem;
+      overflow: hidden;
     }
+
+    .tab-label { display: none; }
 
     .top-nav {
       position: fixed;
       left: 0;
       top: 0;
       z-index: 100;
-      width: 200px;
+      width: 40px;
       height: 100vh;
       background: rgba(237,227,208,0.97);
       backdrop-filter: blur(10px);
@@ -646,30 +646,29 @@
       border-top: 1px solid var(--border);
       border-left: 3px solid transparent;
       width: 100%;
-      text-align: left;
-      padding: 0.9rem 1.2rem;
-      font-size: 0.88rem;
+      text-align: center;
+      padding: 0.75rem 0;
+      font-size: 1.15rem;
       background: transparent;
       color: var(--muted);
     }
     .top-nav .creator-btn:hover {
       background: rgba(155,118,85,0.08);
       color: #D4507A;
-      border-left-color: transparent;
     }
 
     .nav-tab {
       flex: 0 0 auto;
-      padding: 0.85rem 1.2rem;
+      padding: 0.75rem 0;
       border: none;
       background: transparent;
       color: var(--muted);
       cursor: pointer;
-      font-size: 0.88rem;
-      font-weight: 600;
+      font-size: 1.15rem;
       font-family: inherit;
       border-left: 3px solid transparent;
-      text-align: left;
+      text-align: center;
+      width: 100%;
       transition: color 0.2s, border-color 0.2s, background 0.2s;
       white-space: nowrap;
     }
@@ -694,13 +693,14 @@
         overflow-y: visible;
       }
       .nav-brand, .top-nav .creator-btn { display: none; }
+      .tab-label { display: inline; }
       .nav-tab {
         flex: 1;
         padding: 0.7rem 0.3rem;
         border-left: none;
         border-top: 3px solid transparent;
         text-align: center;
-        font-size: 0.78rem;
+        font-size: 0.75rem;
       }
       .nav-tab.active {
         border-left-color: transparent;
@@ -2726,12 +2726,12 @@
   <!-- Left sidebar navigation -->
   <nav class="top-nav">
     <div class="nav-brand">ScreenReduce</div>
-    <button class="nav-tab active" data-page="discover">🎲 Discover</button>
-    <button class="nav-tab" data-page="browse">🔍 Browse</button>
-    <button class="nav-tab" data-page="favorites">🫒 Saved<span class="nav-badge" id="navFavCount"></span></button>
-    <button class="nav-tab" data-page="done">🏺 Done<span class="nav-badge" id="navDoneCount"></span></button>
-    <button class="nav-tab" data-page="friends">👥 Friends<span class="nav-badge" id="navFriendCount"></span></button>
-    <button class="creator-btn" id="openCreator">🏛️ Creator Portal</button>
+    <button class="nav-tab active" data-page="discover"><span class="tab-icon">🎲</span><span class="tab-label"> Discover</span></button>
+    <button class="nav-tab" data-page="browse"><span class="tab-icon">🔍</span><span class="tab-label"> Browse</span></button>
+    <button class="nav-tab" data-page="favorites"><span class="tab-icon">🫒</span><span class="tab-label"> Saved</span><span class="nav-badge" id="navFavCount"></span></button>
+    <button class="nav-tab" data-page="done"><span class="tab-icon">🏺</span><span class="tab-label"> Done</span><span class="nav-badge" id="navDoneCount"></span></button>
+    <button class="nav-tab" data-page="friends"><span class="tab-icon">👥</span><span class="tab-label"> Friends</span><span class="nav-badge" id="navFriendCount"></span></button>
+    <button class="creator-btn" id="openCreator"><span class="tab-icon">🏛️</span><span class="tab-label"> Creator Portal</span></button>
   </nav>
 
   <!-- ── Page: Discover ── -->
