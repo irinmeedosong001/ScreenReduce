@@ -3756,43 +3756,40 @@ setInterval(updateTopBar, 1000);
 updateTopBar();
 
 // ── Encouragement quotes — typewriter effect ──
-const DISCOVER_QUOTES = [
-  "you look cute today. let's go do something.",
-  "hey. the couch will still be there when you get back.",
-  "honestly? you should just go outside right now.",
-  "you've been inside long enough, bestie.",
-  "your future self is already proud of you for this.",
-  "no one ever looked back and wished they'd scrolled more.",
-  "the weather's actually pretty nice today. just saying.",
-  "real talk — you deserve a little adventure today.",
-  "you're way too interesting to just sit here.",
-  "close the tab. go be a person. report back with stories.",
-  "you didn't come this far to just stare at a screen.",
-  "go touch some grass. we mean that in the nicest way.",
-  "something fun is literally waiting for you to show up.",
-  "today could be a good story. go write it.",
-  "you look like someone who needs a little fresh air."
-];
-
-let _quoteTimer = null;
 function typeDiscoverQuote() {
-  const el = document.getElementById('discoverQuote');
+  var quotes = [
+    "you look cute today. let's go do something.",
+    "hey. the couch will still be there when you get back.",
+    "honestly? you should just go outside right now.",
+    "you've been inside long enough, bestie.",
+    "your future self is already proud of you for this.",
+    "no one ever looked back and wished they'd scrolled more.",
+    "the weather's actually pretty nice today. just saying.",
+    "real talk — you deserve a little adventure today.",
+    "you're way too interesting to just sit here.",
+    "close the tab. go be a person. report back with stories.",
+    "you didn't come this far to just stare at a screen.",
+    "go touch some grass. we mean that in the nicest way.",
+    "something fun is literally waiting for you to show up.",
+    "today could be a good story. go write it.",
+    "you look like someone who needs a little fresh air."
+  ];
+  var el = document.getElementById('discoverQuote');
   if (!el) return;
-  if (_quoteTimer) clearTimeout(_quoteTimer);
-  const text = DISCOVER_QUOTES[Math.floor(Math.random() * DISCOVER_QUOTES.length)];
-  let i = 0;
+  if (el._qtimer) clearTimeout(el._qtimer);
+  var text = quotes[Math.floor(Math.random() * quotes.length)];
+  var i = 0;
   el.textContent = '';
   el.classList.add('typing');
-
   function type() {
     if (i < text.length) {
       el.textContent += text[i++];
-      _quoteTimer = setTimeout(type, 40);
+      el._qtimer = setTimeout(type, 40);
     } else {
       el.classList.remove('typing');
     }
   }
-  _quoteTimer = setTimeout(type, 300);
+  el._qtimer = setTimeout(type, 300);
 }
 
 // ── Timer ──
