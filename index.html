@@ -1089,6 +1089,24 @@
       background: rgba(90,138,64,0.12);
       border-color: rgba(90,138,64,0.55);
     }
+    .login-forgot-wrap {
+      text-align: center;
+      margin-top: 0.5rem;
+    }
+    .login-forgot-wrap span {
+      font-size: 0.8rem;
+      color: var(--muted);
+      cursor: pointer;
+      text-decoration: underline;
+    }
+    .login-forgot-wrap span:hover { color: var(--accent); }
+    .reset-hint {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin: 0 0 1.2rem;
+      line-height: 1.5;
+    }
+    .reset-step.hidden { display: none; }
 
     /* ── Header user chip + creator btn ── */
     .header-row {
@@ -2479,7 +2497,38 @@
     <div class="login-error" id="loginError"></div>
     <button class="login-btn" id="loginBtn">Log In</button>
     <div class="login-switch" id="loginSwitch">Don't have an account? <span id="switchLink">Sign up</span></div>
+    <div class="login-forgot-wrap" id="forgotWrap"><span id="forgotLink">Forgot password?</span></div>
     <button class="login-creator-link" id="creatorQuickBtn">🏛️ Creator Login</button>
+  </div>
+</div>
+
+<!-- ── Forgot Password modal ── -->
+<div id="resetModal" class="overlay-screen hidden">
+  <div class="login-box">
+    <div class="login-logo">WithMe</div>
+    <div class="reset-step" id="resetStep1">
+      <p class="reset-hint">Enter the email address linked to your account and we'll verify it.</p>
+      <div class="login-field">
+        <label for="resetEmail">Email address</label>
+        <input type="email" id="resetEmail" placeholder="your@email.com" autocomplete="email" />
+      </div>
+      <div class="login-error" id="resetError1"></div>
+      <button class="login-btn" id="resetVerifyBtn">Verify Email</button>
+    </div>
+    <div class="reset-step hidden" id="resetStep2">
+      <p class="reset-hint">Email verified. Set your new password below.</p>
+      <div class="login-field">
+        <label for="resetNewPass">New password</label>
+        <input type="password" id="resetNewPass" placeholder="New password" autocomplete="new-password" />
+      </div>
+      <div class="login-field">
+        <label for="resetConfirmPass">Confirm new password</label>
+        <input type="password" id="resetConfirmPass" placeholder="Repeat new password" autocomplete="new-password" />
+      </div>
+      <div class="login-error" id="resetError2"></div>
+      <button class="login-btn" id="resetSaveBtn">Save New Password</button>
+    </div>
+    <div class="login-switch" style="margin-top:1rem"><span id="resetBackLink">← Back to login</span></div>
   </div>
 </div>
 
@@ -4070,11 +4119,13 @@ function doAuth() {
     if (pass !== confirm) { loginError.textContent = 'Passwords do not match.'; return; }
     if (accounts[user])  { loginError.textContent = 'Username already taken. Try another.'; return; }
     if (pass.length < 4) { loginError.textContent = 'Password must be at least 4 characters.'; return; }
+    const email = document.getElementById('loginEmail').value.trim().toLowerCase();
+    if (!email) { loginError.textContent = 'Please enter your email address.'; return; }
     const age   = parseInt(document.getElementById('signupAge').value) || null;
     const phone = document.getElementById('signupPhone').value.trim() || null;
     const prefs = Array.from(document.querySelectorAll('.pref-btn.active')).map(b => b.dataset.pref);
     accounts[user] = pass;
-    userMeta[user] = { signupDate: now, lastLogin: now, loginCount: 1, profile: { age, phone, preferences: prefs } };
+    userMeta[user] = { signupDate: now, lastLogin: now, loginCount: 1, email, profile: { age, phone, preferences: prefs } };
     localStorage.setItem('bored_accounts',   JSON.stringify(accounts));
     localStorage.setItem('bored_user_meta',  JSON.stringify(userMeta));
   } else {
@@ -4108,6 +4159,58 @@ function doAuth() {
     setTimeout(() => { loginScreen.classList.add('hidden'); showIntro(); }, 600);
   }
 }
+
+// ── Forgot / Reset password ──
+const resetModal    = document.getElementById('resetModal');
+const resetStep1    = document.getElementById('resetStep1');
+const resetStep2    = document.getElementById('resetStep2');
+const resetError1   = document.getElementById('resetError1');
+const resetError2   = document.getElementById('resetError2');
+let   _resetUser    = null;
+
+document.getElementById('forgotLink').addEventListener('click', () => {
+  resetModal.classList.remove('hidden');
+  resetStep1.classList.remove('hidden');
+  resetStep2.classList.add('hidden');
+  resetError1.textContent = '';
+  document.getElementById('resetEmail').value = '';
+  _resetUser = null;
+});
+
+document.getElementById('resetBackLink').addEventListener('click', () => {
+  resetModal.classList.add('hidden');
+});
+
+document.getElementById('resetVerifyBtn').addEventListener('click', () => {
+  const email = document.getElementById('resetEmail').value.trim().toLowerCase();
+  resetError1.textContent = '';
+  if (!email) { resetError1.textContent = 'Please enter your email address.'; return; }
+  const match = Object.keys(userMeta).find(u => userMeta[u].email && userMeta[u].email.toLowerCase() === email);
+  if (!match) { resetError1.textContent = 'No account found with that email address.'; return; }
+  _resetUser = match;
+  resetStep1.classList.add('hidden');
+  resetStep2.classList.remove('hidden');
+  resetError2.textContent = '';
+  document.getElementById('resetNewPass').value = '';
+  document.getElementById('resetConfirmPass').value = '';
+});
+
+document.getElementById('resetSaveBtn').addEventListener('click', () => {
+  const np = document.getElementById('resetNewPass').value.trim();
+  const cp = document.getElementById('resetConfirmPass').value.trim();
+  resetError2.textContent = '';
+  if (!np) { resetError2.textContent = 'Please enter a new password.'; return; }
+  if (np.length < 4) { resetError2.textContent = 'Password must be at least 4 characters.'; return; }
+  if (np !== cp) { resetError2.textContent = 'Passwords do not match.'; return; }
+  accounts[_resetUser] = np;
+  localStorage.setItem('bored_accounts', JSON.stringify(accounts));
+  resetModal.classList.add('hidden');
+  loginError.textContent = '';
+  document.getElementById('loginUser').value = _resetUser;
+  document.getElementById('loginPass').value = '';
+  document.getElementById('loginPass').focus();
+  _resetUser = null;
+});
 
 // ── Intro (one page per instruction) ──
 const INTRO_SLIDES = [
