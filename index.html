@@ -2824,7 +2824,6 @@
 
   <!-- Left sidebar navigation -->
   <nav class="top-nav">
-    <div class="nav-brand">ScreenReduce</div>
     <button class="nav-tab active" data-page="discover"><span class="tab-icon">🎲</span><span class="tab-label"> Discover</span></button>
     <button class="nav-tab" data-page="browse"><span class="tab-icon">🔍</span><span class="tab-label"> Browse</span></button>
     <button class="nav-tab" data-page="favorites"><span class="tab-icon">🫒</span><span class="tab-label"> Saved</span><span class="nav-badge" id="navFavCount"></span></button>
@@ -4033,6 +4032,7 @@ let   goToCreatorAfterLogin = false;
   updateFriendBadge();
   applyProfile();
   loginScreen.classList.add('hidden');
+  setTimeout(typeDiscoverQuote, 400);
 })();
 
 function setLoginMode(mode) {
@@ -4205,7 +4205,7 @@ function showIntro() {
 
 introBtn.addEventListener('click', () => {
   intro.classList.add('fade-out');
-  setTimeout(() => intro.classList.add('hidden'), 700);
+  setTimeout(() => { intro.classList.add('hidden'); typeDiscoverQuote(); }, 700);
 });
 
 // ── Creator Portal ──
