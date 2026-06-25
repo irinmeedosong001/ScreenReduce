@@ -76,14 +76,14 @@
       font-family: 'Times New Roman', Times, serif;
       font-style: italic;
       color: var(--text);
-      font-size: 1.1rem;
+      font-size: 20px;
       line-height: 1.75;
       text-align: center;
       margin-bottom: 2rem;
       padding: 1rem 1.5rem;
       border-top: 1px solid var(--border);
       border-bottom: 1px solid var(--border);
-      min-height: 2.2em;
+      min-height: 1.8em;
     }
     .discover-commentary.typing::after {
       content: '|';
@@ -3515,6 +3515,7 @@ function switchPage(page) {
   document.querySelectorAll('.nav-tab').forEach(t => t.classList.toggle('active', t.dataset.page === page));
   if (page === 'browse' || page === 'favorites' || page === 'done') renderGrid();
   if (page === 'friends') renderFriendsPage();
+  if (page === 'discover') typeDiscoverQuote();
 }
 
 function showSpotlight(id) {
@@ -3688,29 +3689,30 @@ renderGrid();
 switchPage('discover');
 
 // ── Encouragement quotes — typewriter effect ──
-(function() {
-  const quotes = [
-    "you look cute today. let's go do something.",
-    "hey. the couch will still be there when you get back.",
-    "honestly? you should just go outside right now.",
-    "you've been inside long enough, bestie.",
-    "your future self is already proud of you for this.",
-    "no one ever looked back and wished they'd scrolled more.",
-    "the weather's actually pretty nice today. just saying.",
-    "real talk — you deserve a little adventure today.",
-    "you're way too interesting to just sit here.",
-    "close the tab. go be a person. report back with stories.",
-    "you didn't come this far to just stare at a screen.",
-    "go touch some grass. we mean that in the nicest way.",
-    "something fun is literally waiting for you to show up.",
-    "today could be a good story. go write it.",
-    "you look like someone who needs a little fresh air."
-  ];
+const DISCOVER_QUOTES = [
+  "you look cute today. let's go do something.",
+  "hey. the couch will still be there when you get back.",
+  "honestly? you should just go outside right now.",
+  "you've been inside long enough, bestie.",
+  "your future self is already proud of you for this.",
+  "no one ever looked back and wished they'd scrolled more.",
+  "the weather's actually pretty nice today. just saying.",
+  "real talk — you deserve a little adventure today.",
+  "you're way too interesting to just sit here.",
+  "close the tab. go be a person. report back with stories.",
+  "you didn't come this far to just stare at a screen.",
+  "go touch some grass. we mean that in the nicest way.",
+  "something fun is literally waiting for you to show up.",
+  "today could be a good story. go write it.",
+  "you look like someone who needs a little fresh air."
+];
 
+let _quoteTimer = null;
+function typeDiscoverQuote() {
   const el = document.getElementById('discoverQuote');
   if (!el) return;
-
-  const text = quotes[Math.floor(Math.random() * quotes.length)];
+  if (_quoteTimer) clearTimeout(_quoteTimer);
+  const text = DISCOVER_QUOTES[Math.floor(Math.random() * DISCOVER_QUOTES.length)];
   let i = 0;
   el.textContent = '';
   el.classList.add('typing');
@@ -3718,14 +3720,13 @@ switchPage('discover');
   function type() {
     if (i < text.length) {
       el.textContent += text[i++];
-      setTimeout(type, 40);
+      _quoteTimer = setTimeout(type, 40);
     } else {
       el.classList.remove('typing');
     }
   }
-
-  setTimeout(type, 350);
-})();
+  _quoteTimer = setTimeout(type, 300);
+}
 
 // ── Timer ──
 function parseDefaultMinutes(timeStr) {
