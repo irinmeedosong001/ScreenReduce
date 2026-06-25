@@ -69,6 +69,25 @@
     header p {
       color: var(--muted);
       font-size: 1rem;
+      font-style: italic;
+    }
+
+    .discover-commentary {
+      font-family: 'Times New Roman', Times, serif;
+      font-style: italic;
+      color: var(--muted);
+      font-size: 1rem;
+      line-height: 1.75;
+      text-align: center;
+      margin-bottom: 2rem;
+      padding: 1rem 1.5rem;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .discover-commentary strong {
+      font-style: normal;
+      color: var(--text);
+      font-weight: 700;
     }
 
     /* Mood selector */
@@ -636,7 +655,33 @@
       gap: 0;
       margin: 0;
       padding: 0;
+      overflow: hidden;
+      transition: width 0.28s ease, box-shadow 0.28s ease;
+    }
+    .top-nav:hover {
+      width: 25vw;
+      min-width: 190px;
+      max-width: 300px;
+      box-shadow: 4px 0 24px rgba(44,26,14,0.12);
       overflow-y: auto;
+    }
+    .top-nav:hover .tab-label { display: inline; }
+    .top-nav:hover .nav-brand {
+      font-size: 1.15rem;
+      font-weight: 800;
+      padding: 1.4rem 1.2rem 1.2rem;
+      letter-spacing: -0.01em;
+    }
+    .top-nav:hover .nav-tab {
+      text-align: left;
+      padding: 0.85rem 1.2rem;
+      font-size: 0.88rem;
+      font-weight: 600;
+    }
+    .top-nav:hover .creator-btn {
+      text-align: left;
+      padding: 0.9rem 1.2rem;
+      font-size: 0.88rem;
     }
 
     .top-nav .creator-btn {
@@ -2720,7 +2765,7 @@
   <button class="user-chip" id="userChip" onclick="openProfile()"></button>
 
   <header>
-    <p>Pick a vibe, hit the button, and go do something.</p>
+    <p>Pick a vibe, hit the button, and go live a little.</p>
   </header>
 
   <!-- Left sidebar navigation -->
@@ -2736,6 +2781,8 @@
 
   <!-- ── Page: Discover ── -->
   <div class="page active" id="page-discover">
+
+  <div class="discover-commentary" id="discoverQuote"></div>
 
   <!-- For You banner (shown when user has preferences) -->
   <div id="forYouBanner" style="display:none;margin-bottom:1rem;">
@@ -3634,6 +3681,22 @@ document.getElementById('forYouBtn').addEventListener('click', () => {
 updateCounts();
 renderGrid();
 switchPage('discover');
+
+// ── Encouragement quotes ──
+(function() {
+  const quotes = [
+    "Your best memories were never made staring at a screen.<br><strong>Go make one today.</strong>",
+    "The world outside is still there — <strong>patient, beautiful, and waiting for you.</strong>",
+    "Every hour offline is an hour <strong>fully, irreversibly yours.</strong>",
+    "You won't remember the scroll. <strong>You will remember the moment you stepped away.</strong>",
+    "Put it down. Step out. <strong>Something good is already waiting.</strong>",
+    "Screens can wait. <strong>Life, famously, cannot.</strong>",
+    "The most interesting version of yourself <strong>doesn't live on a device.</strong>",
+    "Idle hands, curious mind — <strong>that's where the good ideas come from.</strong>"
+  ];
+  const el = document.getElementById('discoverQuote');
+  if (el) el.innerHTML = quotes[Math.floor(Math.random() * quotes.length)];
+})();
 
 // ── Timer ──
 function parseDefaultMinutes(timeStr) {
