@@ -4320,6 +4320,14 @@ let   pinEntry      = '';
 let   pinUnlocked   = false;
 let   editingId     = null;
 
+// Auto-provision creator account on any device that doesn't have it
+if (!findAccount(CREATOR_USER)) {
+  accounts[CREATOR_USER] = CREATOR_PIN;
+  userMeta[CREATOR_USER] = userMeta[CREATOR_USER] || { signupDate: new Date().toISOString(), lastLogin: null, loginCount: 0, profile: { preferences: [] } };
+  localStorage.setItem('bored_accounts',  JSON.stringify(accounts));
+  localStorage.setItem('bored_user_meta', JSON.stringify(userMeta));
+}
+
 document.getElementById('openCreator').addEventListener('click', () => {
   if (currentUser !== CREATOR_USER) return;
   creatorPortal.classList.add('open');
